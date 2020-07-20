@@ -1,13 +1,13 @@
-package com.nathanodong.nationalrailhunterws;
+package com.nathanodong.nationaltrainhunterws;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class NationalRailHunterWebServiceApplication {
+public class NationalTrainHunterWebServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(NationalRailHunterWebServiceApplication.class, args);
+		SpringApplication.run(NationalTrainHunterWebServiceApplication.class, args);
 	}
 
 }

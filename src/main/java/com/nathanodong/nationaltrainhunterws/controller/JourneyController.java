@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("v1/journeys")
+@RequestMapping("v1")
 public class JourneyController {
 
     @Autowired
@@ -20,7 +20,7 @@ public class JourneyController {
 
     private final Logger logger = LoggerFactory.getLogger(JourneyController.class);
 
-    @RequestMapping("/departureBoard")
+    @RequestMapping("/journeys/departureBoard")
     public List<Journey> getDepartureBoard(GetBoardRequestParams getBoardRequestParams) {
         return journeyService.getDepartureBoard(getBoardRequestParams);
     }

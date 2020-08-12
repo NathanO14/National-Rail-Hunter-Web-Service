@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.List;
 public class JourneyService {
 
     private final String ON_TIME = "On time";
+    private final String CANCELLED = "Cancelled";
 
     @Autowired
     private AccessToken accessToken;
@@ -41,14 +44,12 @@ public class JourneyService {
                 : Collections.emptyList();
 
         for (ServiceItem serviceItem : serviceItems) {
-            logger.info("{} to {} - {}",
+            logger.debug("{} to {} - {}",
                     serviceItem.getStd(),
                     serviceItem.getDestination().getLocation().get(0).getLocationName(),
                     serviceItem.getEtd());
 
             Journey journey = new Journey();
-            journey.setRsId(serviceItem.getRsid());
-            journey.setServiceID(serviceItem.getServiceID());
             journey.setPlatform(serviceItem.getPlatform());
 
             if (serviceItem.getOrigin().getLocation().size() > 1) {
@@ -62,12 +63,29 @@ public class JourneyService {
             }
             journey.setDestinationStation(serviceItem.getDestination().getLocation().get(0).getLocationName());
 
-            journey.setScheduledDepartureTime(serviceItem.getStd());
-            journey.setEstimatedDepartureTime(serviceItem.getEtd());
+            journey.setScheduledDepartureTime(convertToLocalDateTime(serviceItem.getStd()));
+            journey.setEstimatedDepartureTime(getEstimatedDepartureTime(serviceItem));
+            journey.setDelayed(!ON_TIME.equals(serviceItem.getEtd()));
+            journey.setCancelled(CANCELLED.equals(serviceItem.getEtd()));
 
             departures.add(journey);
         }
 
         return departures;
+    }
+
+    private LocalTime getEstimatedDepartureTime(ServiceItem serviceItem) {
+        if (ON_TIME.equals(serviceItem.getEtd())) {
+            return convertToLocalDateTime(serviceItem.getStd());
+        } else if (CANCELLED.equals(serviceItem.getEtd())) {
+            return null;
+        } else {
+            return convertToLocalDateTime(serviceItem.getEtd());
+        }
+    }
+
+    private LocalTime convertToLocalDateTime(String time) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        return LocalTime.parse(time, formatter);
     }
 }

@@ -1,40 +1,24 @@
 package com.nathanodong.nationaltrainhunterws.model;
 
+import java.time.LocalTime;
+
 public class Journey {
-    private String rsId;
-
-    private String serviceID;
-
     private String platform;
 
     private String originStation;
 
     private String destinationStation;
 
-    private String status;
+    private LocalTime scheduledDepartureTime;
 
-    private String scheduledDepartureTime;
+    private LocalTime estimatedDepartureTime;
 
-    private String estimatedDepartureTime;
+    private boolean isDelayed;
+
+    private boolean isCancelled;
 
     public Journey() {
 
-    }
-
-    public String getRsId() {
-        return rsId;
-    }
-
-    public void setRsId(String rsId) {
-        this.rsId = rsId;
-    }
-
-    public String getServiceID() {
-        return serviceID;
-    }
-
-    public void setServiceID(String serviceID) {
-        this.serviceID = serviceID;
     }
 
     public String getPlatform() {
@@ -61,27 +45,35 @@ public class Journey {
         this.destinationStation = destinationStation;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getScheduledDepartureTime() {
+    public LocalTime getScheduledDepartureTime() {
         return scheduledDepartureTime;
     }
 
-    public void setScheduledDepartureTime(String scheduledDepartureTime) {
+    public void setScheduledDepartureTime(LocalTime scheduledDepartureTime) {
         this.scheduledDepartureTime = scheduledDepartureTime;
     }
 
-    public String getEstimatedDepartureTime() {
+    public LocalTime getEstimatedDepartureTime() {
         return estimatedDepartureTime;
     }
 
-    public void setEstimatedDepartureTime(String estimatedDepartureTime) {
+    public void setEstimatedDepartureTime(LocalTime estimatedDepartureTime) {
         this.estimatedDepartureTime = estimatedDepartureTime;
+    }
+
+    public boolean isDelayed() {
+        return isDelayed;
+    }
+
+    public void setDelayed(boolean delayed) {
+        isDelayed = delayed;
+    }
+
+    public boolean isCancelled() {
+        return isCancelled;
+    }
+
+    public void setCancelled(boolean cancelled) {
+        isCancelled = cancelled;
     }
 }

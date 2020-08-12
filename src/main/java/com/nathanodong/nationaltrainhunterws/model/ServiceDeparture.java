@@ -2,12 +2,18 @@ package com.nathanodong.nationaltrainhunterws.model;
 
 import java.time.LocalTime;
 
-public class Journey {
+public class ServiceDeparture {
+    private String rsId;
+
+    private String serviceID;
+
     private String platform;
 
     private String originStation;
 
     private String destinationStation;
+
+    private String via;
 
     private LocalTime scheduledDepartureTime;
 
@@ -17,8 +23,24 @@ public class Journey {
 
     private boolean isCancelled;
 
-    public Journey() {
+    public ServiceDeparture() {
 
+    }
+
+    public String getRsId() {
+        return rsId;
+    }
+
+    public void setRsId(String rsId) {
+        this.rsId = rsId;
+    }
+
+    public String getServiceID() {
+        return serviceID;
+    }
+
+    public void setServiceID(String serviceID) {
+        this.serviceID = serviceID;
     }
 
     public String getPlatform() {
@@ -43,6 +65,14 @@ public class Journey {
 
     public void setDestinationStation(String destinationStation) {
         this.destinationStation = destinationStation;
+    }
+
+    public String getVia() {
+        return via;
+    }
+
+    public void setVia(String via) {
+        this.via = via;
     }
 
     public LocalTime getScheduledDepartureTime() {

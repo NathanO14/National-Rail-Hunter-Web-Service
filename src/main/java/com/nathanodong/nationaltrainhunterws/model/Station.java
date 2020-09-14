@@ -18,6 +18,11 @@ public class Station {
     public Station() {
     }
 
+    public Station(String stationCode, String stationName) {
+        this.stationCode = stationCode;
+        this.stationName = stationName;
+    }
+
     public String getStationCode() {
         return stationCode;
     }

@@ -23,6 +23,7 @@ public class ServiceDataService {
 
     private final String ON_TIME = "On time";
     private final String CANCELLED = "Cancelled";
+    private final String DELAYED = "Delayed";
 
     @Autowired
     private AccessToken accessToken;
@@ -67,7 +68,7 @@ public class ServiceDataService {
 
             serviceDeparture.setScheduledDepartureTime(convertToLocalDateTime(serviceItem.getStd()));
             serviceDeparture.setEstimatedDepartureTime(getEstimatedDepartureTime(serviceItem));
-            serviceDeparture.setDelayed(!ON_TIME.equals(serviceItem.getEtd()));
+            serviceDeparture.setDelayed(!ON_TIME.equals(serviceItem.getEtd()) || DELAYED.equals(serviceItem.getEtd()));
             serviceDeparture.setCancelled(CANCELLED.equals(serviceItem.getEtd()));
 
             departures.add(serviceDeparture);
@@ -83,7 +84,10 @@ public class ServiceDataService {
                 ldbServiceSoap.getServiceDetails(getServiceDetailsRequestParams, accessToken);
 
         ServiceDetails serviceDetails = serviceDetailsResponseType.getGetServiceDetailsResult();
-        logger.debug("{} - {}", serviceDetails.getRsid(), serviceDetails.getServiceType().value());
+//        logger.info("{} - Previous Calling Points: {}, Subsequent Calling Points: {}",
+//                serviceDetails.getRsid(),
+//                serviceDetails.getPreviousCallingPoints().getCallingPointList().get(0).getCallingPoint().size(),
+//                serviceDetails.getSubsequentCallingPoints().getCallingPointList().get(0).getCallingPoint().size());
 
         serviceInformation.setRsId(serviceDetails.getRsid());
         serviceInformation.setNumberOfCoaches(serviceDetails.getLength());
@@ -96,12 +100,14 @@ public class ServiceDataService {
     }
 
     private LocalTime getEstimatedDepartureTime(ServiceItem serviceItem) {
-        if (ON_TIME.equals(serviceItem.getEtd())) {
-            return convertToLocalDateTime(serviceItem.getStd());
-        } else if (CANCELLED.equals(serviceItem.getEtd())) {
-            return null;
-        } else {
-            return convertToLocalDateTime(serviceItem.getEtd());
+        switch (serviceItem.getEtd()) {
+            case DELAYED:
+            case ON_TIME:
+                return convertToLocalDateTime(serviceItem.getStd());
+            case CANCELLED:
+                return null;
+            default:
+                return convertToLocalDateTime(serviceItem.getEtd());
         }
     }
 

@@ -4,8 +4,6 @@ import com.thalesgroup.rtti._2013_11_28.token.types.AccessToken;
 import com.thalesgroup.rtti._2017_10_01.ldb.LDBServiceSoap;
 import com.thalesgroup.rtti._2017_10_01.ldb.Ldb;
 import org.apache.cxf.endpoint.Client;
-import org.apache.cxf.ext.logging.LoggingInInterceptor;
-import org.apache.cxf.ext.logging.LoggingOutInterceptor;
 import org.apache.cxf.frontend.ClientProxy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -37,10 +35,12 @@ public class AppConfiguration {
 
     @Bean
     public Client client(LDBServiceSoap ldbServiceSoap) {
-        Client client = ClientProxy.getClient(ldbServiceSoap);
-        client.getInInterceptors().add(new LoggingInInterceptor());
-        client.getOutInterceptors().add(new LoggingOutInterceptor());
+//        Client client = ClientProxy.getClient(ldbServiceSoap);
+//        client.getInInterceptors().add(new LoggingInInterceptor());
+//        client.getOutInterceptors().add(new LoggingOutInterceptor());
+//
+//        return client;
 
-        return client;
+        return ClientProxy.getClient(ldbServiceSoap);
     }
 }

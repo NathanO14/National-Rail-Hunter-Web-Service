@@ -19,9 +19,9 @@ public class ServiceDeparture {
 
     private LocalDateTime estimatedDepartureTime;
 
-    private boolean isDelayed;
+    private boolean delayed;
 
-    private boolean isCancelled;
+    private boolean cancelled;
 
     public ServiceDeparture() {
 
@@ -92,18 +92,18 @@ public class ServiceDeparture {
     }
 
     public boolean isDelayed() {
-        return isDelayed;
+        return delayed;
     }
 
     public void setDelayed(boolean delayed) {
-        isDelayed = delayed;
+        this.delayed = delayed;
     }
 
     public boolean isCancelled() {
-        return isCancelled;
+        return cancelled;
     }
 
     public void setCancelled(boolean cancelled) {
-        isCancelled = cancelled;
+        this.cancelled = cancelled;
     }
 }

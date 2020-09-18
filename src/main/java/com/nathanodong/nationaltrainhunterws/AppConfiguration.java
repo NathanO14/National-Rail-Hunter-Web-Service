@@ -1,9 +1,14 @@
 package com.nathanodong.nationaltrainhunterws;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.thalesgroup.rtti._2013_11_28.token.types.AccessToken;
 import com.thalesgroup.rtti._2017_10_01.ldb.LDBServiceSoap;
 import com.thalesgroup.rtti._2017_10_01.ldb.Ldb;
 import org.apache.cxf.endpoint.Client;
+import org.apache.cxf.ext.logging.LoggingInInterceptor;
+import org.apache.cxf.ext.logging.LoggingOutInterceptor;
 import org.apache.cxf.frontend.ClientProxy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -35,12 +40,18 @@ public class AppConfiguration {
 
     @Bean
     public Client client(LDBServiceSoap ldbServiceSoap) {
-//        Client client = ClientProxy.getClient(ldbServiceSoap);
-//        client.getInInterceptors().add(new LoggingInInterceptor());
-//        client.getOutInterceptors().add(new LoggingOutInterceptor());
-//
-//        return client;
+        Client client = ClientProxy.getClient(ldbServiceSoap);
+        client.getInInterceptors().add(new LoggingInInterceptor());
+        client.getOutInterceptors().add(new LoggingOutInterceptor());
 
-        return ClientProxy.getClient(ldbServiceSoap);
+        return client;
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        return objectMapper;
     }
 }

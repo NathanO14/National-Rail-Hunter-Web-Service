@@ -1,6 +1,6 @@
 package com.nathanodong.nationaltrainhunterws.model;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 public class ServiceDeparture {
     private String rsId;
@@ -15,9 +15,9 @@ public class ServiceDeparture {
 
     private String via;
 
-    private LocalTime scheduledDepartureTime;
+    private LocalDateTime scheduledDepartureTime;
 
-    private LocalTime estimatedDepartureTime;
+    private LocalDateTime estimatedDepartureTime;
 
     private boolean isDelayed;
 
@@ -75,19 +75,19 @@ public class ServiceDeparture {
         this.via = via;
     }
 
-    public LocalTime getScheduledDepartureTime() {
+    public LocalDateTime getScheduledDepartureTime() {
         return scheduledDepartureTime;
     }
 
-    public void setScheduledDepartureTime(LocalTime scheduledDepartureTime) {
+    public void setScheduledDepartureTime(LocalDateTime scheduledDepartureTime) {
         this.scheduledDepartureTime = scheduledDepartureTime;
     }
 
-    public LocalTime getEstimatedDepartureTime() {
+    public LocalDateTime getEstimatedDepartureTime() {
         return estimatedDepartureTime;
     }
 
-    public void setEstimatedDepartureTime(LocalTime estimatedDepartureTime) {
+    public void setEstimatedDepartureTime(LocalDateTime estimatedDepartureTime) {
         this.estimatedDepartureTime = estimatedDepartureTime;
     }
 

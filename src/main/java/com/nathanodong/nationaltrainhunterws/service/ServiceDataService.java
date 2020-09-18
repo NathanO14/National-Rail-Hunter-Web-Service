@@ -12,11 +12,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class ServiceDataService {
@@ -84,11 +87,6 @@ public class ServiceDataService {
                 ldbServiceSoap.getServiceDetails(getServiceDetailsRequestParams, accessToken);
 
         ServiceDetails serviceDetails = serviceDetailsResponseType.getGetServiceDetailsResult();
-//        logger.info("{} - Previous Calling Points: {}, Subsequent Calling Points: {}",
-//                serviceDetails.getRsid(),
-//                serviceDetails.getPreviousCallingPoints().getCallingPointList().get(0).getCallingPoint().size(),
-//                serviceDetails.getSubsequentCallingPoints().getCallingPointList().get(0).getCallingPoint().size());
-
         serviceInformation.setRsId(serviceDetails.getRsid());
         serviceInformation.setNumberOfCoaches(serviceDetails.getLength());
         serviceInformation.setOperator(serviceDetails.getOperator());
@@ -99,7 +97,7 @@ public class ServiceDataService {
         return serviceInformation;
     }
 
-    private LocalTime getEstimatedDepartureTime(ServiceItem serviceItem) {
+    private LocalDateTime getEstimatedDepartureTime(ServiceItem serviceItem) {
         switch (serviceItem.getEtd()) {
             case DELAYED:
             case ON_TIME:
@@ -111,8 +109,14 @@ public class ServiceDataService {
         }
     }
 
-    private LocalTime convertToLocalDateTime(String time) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        return LocalTime.parse(time, formatter);
+    private LocalDateTime convertToLocalDateTime(String time) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm", Locale.UK);
+        LocalDateTime convertedDateTime = LocalTime.parse(time, formatter).atDate(LocalDate.now());
+
+        if (convertedDateTime.isBefore(LocalDateTime.now())){
+            convertedDateTime = convertedDateTime.plusDays(1);
+        }
+
+        return convertedDateTime;
     }
 }

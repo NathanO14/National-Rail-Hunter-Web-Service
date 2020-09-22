@@ -21,4 +21,4 @@ jobs:
       with:
         java-version: 1.8
     - name: Maven - Test
-      run: ./mvnw test -DLDB_TOKEN=5602d958-1c3b-49c3-9ed1-55ef84a0a483
+      run: ./mvnw test -DLDBSV_TOKEN=ee495390-50d5-40b7-b4b2-58726eef6db5

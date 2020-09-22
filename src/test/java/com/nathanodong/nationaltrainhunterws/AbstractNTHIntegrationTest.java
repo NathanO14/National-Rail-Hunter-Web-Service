@@ -24,7 +24,7 @@ public class AbstractNTHIntegrationTest {
         mockWebServer.shutdown();
     }
 
-    void mockWebResponse(String relativeFileName, int responseCode) {
+    protected void mockWebResponse(String relativeFileName, int responseCode) {
         MockResponse mockResponse = new MockResponse()
                 .setResponseCode(responseCode)
                 .setBody(nthFileResources.getFileWithUtil(relativeFileName));

@@ -5,25 +5,28 @@ import com.thalesgroup.rtti._2007_10_10.ldb.commontypes.ServiceType;
 import java.util.List;
 
 public class ServiceInformation {
+
+    private String rid;
+
     private String rsId;
 
     private String serviceId;
-
-    private Integer numberOfCoaches;
 
     private String operator;
 
     private ServiceType serviceType;
 
-    private String delayReason;
-
-    private Boolean isCancelled;
-
-    private List<ServiceCallingPoint> previousCallingPoints;
-
-    private List<ServiceCallingPoint> subsequentCallingPoints;
+    private List<ServiceCallingPoint> callingPoints;
 
     public ServiceInformation() {
+    }
+
+    public String getRid() {
+        return rid;
+    }
+
+    public void setRid(String rid) {
+        this.rid = rid;
     }
 
     public String getRsId() {
@@ -42,14 +45,6 @@ public class ServiceInformation {
         this.serviceId = serviceId;
     }
 
-    public Integer getNumberOfCoaches() {
-        return numberOfCoaches;
-    }
-
-    public void setNumberOfCoaches(Integer numberOfCoaches) {
-        this.numberOfCoaches = numberOfCoaches;
-    }
-
     public String getOperator() {
         return operator;
     }
@@ -66,35 +61,11 @@ public class ServiceInformation {
         this.serviceType = serviceType;
     }
 
-    public String getDelayReason() {
-        return delayReason;
+    public List<ServiceCallingPoint> getCallingPoints() {
+        return callingPoints;
     }
 
-    public void setDelayReason(String delayReason) {
-        this.delayReason = delayReason;
-    }
-
-    public Boolean getCancelled() {
-        return isCancelled;
-    }
-
-    public void setCancelled(Boolean cancelled) {
-        isCancelled = cancelled;
-    }
-
-    public List<ServiceCallingPoint> getPreviousCallingPoints() {
-        return previousCallingPoints;
-    }
-
-    public void setPreviousCallingPoints(List<ServiceCallingPoint> previousCallingPoints) {
-        this.previousCallingPoints = previousCallingPoints;
-    }
-
-    public List<ServiceCallingPoint> getSubsequentCallingPoints() {
-        return subsequentCallingPoints;
-    }
-
-    public void setSubsequentCallingPoints(List<ServiceCallingPoint> subsequentCallingPoints) {
-        this.subsequentCallingPoints = subsequentCallingPoints;
+    public void setCallingPoints(List<ServiceCallingPoint> callingPoints) {
+        this.callingPoints = callingPoints;
     }
 }

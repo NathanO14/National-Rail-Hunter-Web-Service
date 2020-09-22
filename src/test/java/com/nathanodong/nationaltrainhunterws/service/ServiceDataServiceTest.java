@@ -1,16 +1,10 @@
 package com.nathanodong.nationaltrainhunterws.service;
 
 import com.nathanodong.nationaltrainhunterws.AbstractNTHIntegrationTest;
-import com.nathanodong.nationaltrainhunterws.model.ServiceDeparture;
-import com.thalesgroup.rtti._2007_10_10.ldb.commontypes.FilterType;
-import com.thalesgroup.rtti._2017_10_01.ldb.GetBoardRequestParams;
+import com.thalesgroup.rtti._2017_10_01.ldbsv.ObjectFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @SpringBootTest
 class ServiceDataServiceTest extends AbstractNTHIntegrationTest {
@@ -18,17 +12,32 @@ class ServiceDataServiceTest extends AbstractNTHIntegrationTest {
     @Autowired
     private ServiceDataService serviceDataService;
 
+    @Autowired
+    private ObjectFactory objectFactory;
+
     @Test
-    void getDepartureBoard() {
+    void getDepartureBoard() throws Exception {
+        //TODO: Complete
 //        mockWebResponse("xml/GetDepartureBoardResponse.xml", 200);
-
-        GetBoardRequestParams params = new GetBoardRequestParams();
-        params.setCrs("STP");
-//        params.setFilterCrs("CST");
-        params.setFilterType(FilterType.TO);
-
-        List<ServiceDeparture> serviceDepartures = serviceDataService.getDepartureBoard(params);
-
-        assertFalse(serviceDepartures.isEmpty());
+//
+//        GetBoardByCRSParams params = new GetBoardByCRSParams();
+//        params.setCrs("STP");
+////        params.setFilterCrs("CST");
+////        params.setFilterType(FilterType.TO);
+//
+//        GetBoardByCRSParams boardByCRSParams = objectFactory.createGetBoardByCRSParams();
+//        boardByCRSParams.setNumRows(1);
+//        boardByCRSParams.setCrs("STP");
+////        boardByCRSParams.setFiltercrs(objectFactory.createGetBoardByCRSParamsFiltercrs(""));
+//
+//        GregorianCalendar gcal = GregorianCalendar.from(LocalDateTime.now().atZone(ZoneId.systemDefault()));
+//        XMLGregorianCalendar xcal = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
+//        boardByCRSParams.setTime(xcal);
+//
+//        boardByCRSParams.setTimeWindow(60);
+//
+//        List<ServiceDeparture> serviceDepartures = serviceDataService.getDepartureBoard(params);
+//
+//        assertFalse(serviceDepartures.isEmpty());
     }
 }

@@ -3,6 +3,9 @@ package com.nathanodong.nationaltrainhunterws.model;
 import java.time.LocalDateTime;
 
 public class ServiceDeparture {
+
+    private String rid;
+
     private String rsId;
 
     private String serviceID;
@@ -23,8 +26,18 @@ public class ServiceDeparture {
 
     private boolean cancelled;
 
+    private Integer length;
+
     public ServiceDeparture() {
 
+    }
+
+    public String getRid() {
+        return rid;
+    }
+
+    public void setRid(String rid) {
+        this.rid = rid;
     }
 
     public String getRsId() {
@@ -105,5 +118,13 @@ public class ServiceDeparture {
 
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
+    }
+
+    public Integer getLength() {
+        return length;
+    }
+
+    public void setLength(Integer length) {
+        this.length = length;
     }
 }

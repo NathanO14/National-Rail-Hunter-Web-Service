@@ -1,25 +1,22 @@
 package com.nathanodong.nationaltrainhunterws.service;
 
+import com.nathanodong.nationaltrainhunterws.model.ServiceCallingPoint;
 import com.nathanodong.nationaltrainhunterws.model.ServiceDeparture;
 import com.nathanodong.nationaltrainhunterws.model.ServiceInformation;
 import com.thalesgroup.rtti._2013_11_28.token.types.AccessToken;
-import com.thalesgroup.rtti._2017_10_01.ldb.*;
-import com.thalesgroup.rtti._2017_10_01.ldb.types.ServiceDetails;
-import com.thalesgroup.rtti._2017_10_01.ldb.types.ServiceItem;
-import com.thalesgroup.rtti._2017_10_01.ldb.types.ServiceItemWithCallingPoints;
+import com.thalesgroup.rtti._2017_10_01.ldbsv.*;
+import com.thalesgroup.rtti._2017_10_01.ldbsv.types.ServiceDetails;
+import com.thalesgroup.rtti._2017_10_01.ldbsv.types.ServiceItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 @Service
 public class ServiceDataService {
@@ -32,28 +29,29 @@ public class ServiceDataService {
     private AccessToken accessToken;
 
     @Autowired
-    private LDBServiceSoap ldbServiceSoap;
+    private LDBSVServiceSoap ldbsvServiceSoap;
 
     private final Logger logger = LoggerFactory.getLogger(ServiceDataService.class);
 
-    public List<ServiceDeparture> getDepartureBoard(GetBoardRequestParams getBoardRequestParams) {
+    public List<ServiceDeparture> getDepartureBoard(GetBoardByCRSParams getBoardRequestParams) {
         List<ServiceDeparture> departures = new ArrayList<>();
 
-        StationBoardWithDetailsResponseType departureBoard = ldbServiceSoap.getDepBoardWithDetails(getBoardRequestParams, accessToken);
+        GetBoardResponseType departureBoard = ldbsvServiceSoap.getDepartureBoardByCRS(getBoardRequestParams, accessToken);
 
-        logger.debug("Trains at {}", departureBoard.getGetStationBoardResult().getLocationName());
+        logger.debug("Trains at {}", departureBoard.getGetBoardResult().getLocationName());
         logger.debug("===============================================================================");
 
-        List<ServiceItemWithCallingPoints> serviceItems = departureBoard.getGetStationBoardResult().getTrainServices() != null
-                ? departureBoard.getGetStationBoardResult().getTrainServices().getService()
+        List<ServiceItem> serviceItems = departureBoard.getGetBoardResult().getTrainServices() != null
+                ? departureBoard.getGetBoardResult().getTrainServices().getService()
                 : Collections.emptyList();
 
-        for (ServiceItemWithCallingPoints serviceItem : serviceItems) {
+        for (ServiceItem serviceItem : serviceItems) {
             logger.debug("{}", serviceItem.toString());
 
             ServiceDeparture serviceDeparture = new ServiceDeparture();
             serviceDeparture.setRsId(serviceItem.getRsid());
-            serviceDeparture.setServiceID(serviceItem.getServiceID());
+            serviceDeparture.setRid(serviceItem.getRid());
+            serviceDeparture.setServiceID(serviceItem.getTrainid());
             serviceDeparture.setPlatform(serviceItem.getPlatform());
 
             if (serviceItem.getOrigin().getLocation().size() > 1) {
@@ -69,10 +67,11 @@ public class ServiceDataService {
             serviceDeparture.setDestinationStation(serviceItem.getDestination().getLocation().get(0).getLocationName());
             serviceDeparture.setVia(serviceItem.getDestination().getLocation().get(0).getVia());
 
-            serviceDeparture.setScheduledDepartureTime(convertToLocalDateTime(serviceItem.getStd()));
+            serviceDeparture.setScheduledDepartureTime(serviceItem.getStd().toGregorianCalendar().toZonedDateTime().toLocalDateTime());
             serviceDeparture.setEstimatedDepartureTime(getEstimatedDepartureTime(serviceItem));
-            serviceDeparture.setDelayed(!ON_TIME.equals(serviceItem.getEtd()) || DELAYED.equals(serviceItem.getEtd()));
-            serviceDeparture.setCancelled(CANCELLED.equals(serviceItem.getEtd()));
+            serviceDeparture.setDelayed(serviceDeparture.getEstimatedDepartureTime().isAfter(serviceDeparture.getScheduledDepartureTime()));
+            serviceDeparture.setCancelled(serviceItem.isIsCancelled() != null ? serviceItem.isIsCancelled() : false);
+            serviceDeparture.setLength(serviceItem.getLength());
 
             departures.add(serviceDeparture);
         }
@@ -80,43 +79,55 @@ public class ServiceDataService {
         return departures;
     }
 
-    public ServiceInformation getServiceDetails(GetServiceDetailsRequestParams getServiceDetailsRequestParams) {
+    public ServiceInformation getServiceDetails(GetServiceDetailsByRIDParams serviceDetailsByRIDParams) {
         ServiceInformation serviceInformation = new ServiceInformation();
 
-        ServiceDetailsResponseType serviceDetailsResponseType =
-                ldbServiceSoap.getServiceDetails(getServiceDetailsRequestParams, accessToken);
+        GetServiceDetailsResponseType serviceDetailsResponseType =
+                ldbsvServiceSoap.getServiceDetailsByRID(serviceDetailsByRIDParams, accessToken);
 
         ServiceDetails serviceDetails = serviceDetailsResponseType.getGetServiceDetailsResult();
+
+        serviceInformation.setRid(serviceDetails.getRid());
         serviceInformation.setRsId(serviceDetails.getRsid());
-        serviceInformation.setNumberOfCoaches(serviceDetails.getLength());
         serviceInformation.setOperator(serviceDetails.getOperator());
         serviceInformation.setServiceType(serviceDetails.getServiceType());
-        serviceInformation.setDelayReason(serviceDetails.getDelayReason());
-        serviceInformation.setCancelled(serviceDetails.isIsCancelled());
+
+        List<ServiceCallingPoint> callingPoints = new ArrayList<>();
+        serviceDetails.getLocations().getLocation().forEach(serviceLocation -> {
+            ServiceCallingPoint serviceCallingPoint = new ServiceCallingPoint();
+
+            serviceCallingPoint.setCrs(serviceLocation.getCrs());
+            serviceCallingPoint.setStationName(serviceLocation.getLocationName());
+            serviceCallingPoint.setPlatform(serviceLocation.getPlatform());
+
+            serviceCallingPoint.setScheduledArrivalTime(convertToLocalDateTime(serviceLocation.getSta()));
+            serviceCallingPoint.setActualArrivalTime(convertToLocalDateTime(serviceLocation.getAta()));
+            serviceCallingPoint.setEstimatedArrivalTime(convertToLocalDateTime(serviceLocation.getEta()));
+
+            serviceCallingPoint.setScheduledDepartureTime(convertToLocalDateTime(serviceLocation.getStd()));
+            serviceCallingPoint.setActualDepartureTime(convertToLocalDateTime(serviceLocation.getAtd()));
+            serviceCallingPoint.setEstimatedDepartureTime(convertToLocalDateTime(serviceLocation.getEtd()));
+
+            callingPoints.add(serviceCallingPoint);
+        });
+        serviceInformation.setCallingPoints(callingPoints);
 
         return serviceInformation;
     }
 
     private LocalDateTime getEstimatedDepartureTime(ServiceItem serviceItem) {
-        switch (serviceItem.getEtd()) {
-            case DELAYED:
-            case ON_TIME:
-                return convertToLocalDateTime(serviceItem.getStd());
-            case CANCELLED:
-                return null;
-            default:
-                return convertToLocalDateTime(serviceItem.getEtd());
+        if (serviceItem.getEtd() != null) {
+            return convertToLocalDateTime(serviceItem.getEtd());
+        } else {
+            return convertToLocalDateTime(serviceItem.getStd());
         }
     }
 
-    private LocalDateTime convertToLocalDateTime(String time) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm", Locale.UK);
-        LocalDateTime convertedDateTime = LocalTime.parse(time, formatter).atDate(LocalDate.now());
-
-        if (convertedDateTime.isBefore(LocalDateTime.now())){
-            convertedDateTime = convertedDateTime.plusDays(1);
+    private LocalDateTime convertToLocalDateTime(XMLGregorianCalendar time) {
+        if (time == null) {
+            return null;
         }
 
-        return convertedDateTime;
+        return time.toGregorianCalendar().toZonedDateTime().toLocalDateTime();
     }
 }

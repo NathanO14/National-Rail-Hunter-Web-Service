@@ -21,10 +21,6 @@ import java.util.List;
 @Service
 public class ServiceDataService {
 
-    private final String ON_TIME = "On time";
-    private final String CANCELLED = "Cancelled";
-    private final String DELAYED = "Delayed";
-
     @Autowired
     private AccessToken accessToken;
 

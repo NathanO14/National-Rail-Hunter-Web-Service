@@ -15,11 +15,21 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.net.URL;
+
 @Configuration
 public class AppConfiguration {
 
     @Value("${nationalrail.ldbsv.token}")
     private String LDBSV_TOKEN;
+
+    @Value("${nationalrail.ldbsv.url}")
+    private String NR_WS_URL;
+
+    @Bean
+    public URL nrUrl() throws Exception {
+        return new URL(NR_WS_URL + "wsdl.aspx?refver=2015-05-14");
+    }
 
     @Bean
     public AccessToken accessToken() {
@@ -30,7 +40,8 @@ public class AppConfiguration {
     }
 
     @Bean
-    public Ldbsv ldbsv() {
+    public Ldbsv ldbsv() throws Exception {
+        Ldbsv ldbsv = new Ldbsv(nrUrl());
         return new Ldbsv();
     }
 

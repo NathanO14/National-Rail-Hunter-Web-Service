@@ -1,33 +1,34 @@
 package com.nathanodong.nationaltrainhunterws;
 
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import com.thalesgroup.rtti._2013_11_28.token.types.AccessToken;
+import com.thalesgroup.rtti._2017_10_01.ldbsv.LDBSVServiceSoap;
+import com.thalesgroup.rtti._2017_10_01.ldbsv.Ldbsv;
+import org.apache.cxf.endpoint.Client;
+import org.junit.Before;
+import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit4.SpringRunner;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest
-public class AbstractNTHIntegrationTest {
-    private MockWebServer mockWebServer = new MockWebServer();
-    private NTHFileResources nthFileResources = new NTHFileResources();
+public abstract class AbstractNTHIntegrationTest {
+    @MockBean
+    protected LDBSVServiceSoap ldbsvServiceSoap;
 
-    @BeforeEach
-    void setUp() throws Exception {
+    @MockBean
+    private Ldbsv ldbsv;
+
+    @Autowired
+    protected AccessToken accessToken;
+
+    @MockBean
+    private Client client;
+
+    @Before
+    public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        mockWebServer.start(9013);
-        mockWebResponse("xml/definition.xml", 200);
-    }
-
-    @AfterEach
-    void tearDown() throws Exception {
-        mockWebServer.shutdown();
-    }
-
-    protected void mockWebResponse(String relativeFileName, int responseCode) {
-        MockResponse mockResponse = new MockResponse()
-                .setResponseCode(responseCode)
-                .setBody(nthFileResources.getFileWithUtil(relativeFileName));
-        mockWebServer.enqueue(mockResponse);
     }
 }

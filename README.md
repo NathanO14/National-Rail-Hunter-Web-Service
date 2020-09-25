@@ -3,7 +3,7 @@ National Train Hunter Web Service
 
 ## Initial Setup
 
-Generate the extra Java sources to connect to NR API and compile:  
+Generate the extra Java sources to connect to the Live Departure Boards Staff Web Service and compile:  
 
 ```./mvnw generate-sources```
 
@@ -18,6 +18,6 @@ Generate the extra Java sources to connect to NR API and compile:
 
 ## Tests
 
-Run tests via the command line:
+Run tests via the command line:  
 
-```./mvnw test -DLDBSV_TOKEN=${LDBSV_TOKEN}```
+```./mvnw test```

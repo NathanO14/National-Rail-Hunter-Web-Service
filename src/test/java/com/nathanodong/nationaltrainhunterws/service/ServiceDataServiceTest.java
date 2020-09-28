@@ -27,13 +27,9 @@ public class ServiceDataServiceTest extends AbstractNTHIntegrationTest {
 
     @Test
     public void getDepartureBoard() throws Exception {
-        GetBoardByCRSParams params = new GetBoardByCRSParams();
-        params.setCrs("STP");
-
         GetBoardByCRSParams boardByCRSParams = objectFactory.createGetBoardByCRSParams();
         boardByCRSParams.setNumRows(1);
         boardByCRSParams.setCrs("STP");
-//        boardByCRSParams.setFiltercrs(objectFactory.createGetBoardByCRSParamsFiltercrs(""));
 
         GregorianCalendar gcal = GregorianCalendar.from(LocalDateTime.now().atZone(ZoneId.systemDefault()));
         XMLGregorianCalendar xcal = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
@@ -41,9 +37,11 @@ public class ServiceDataServiceTest extends AbstractNTHIntegrationTest {
 
         boardByCRSParams.setTimeWindow(60);
 
-//        when(ldbsvServiceSoap.getDepartureBoardByCRS(params, accessToken)).thenReturn(null);
+//        when(ldbsvServiceSoap.getDepartureBoardByCRS(boardByCRSParams, accessToken))
+//                .thenReturn(NTHTestResources.testGetBoardResponseType());
 //
-//        List<ServiceDeparture> serviceDepartures = serviceDataService.getDepartureBoard(params);
+//        List<ServiceDeparture> serviceDepartures =
+//                serviceDataService.getDepartureBoard(boardByCRSParams);
 //
 //        assertFalse(serviceDepartures.isEmpty());
     }

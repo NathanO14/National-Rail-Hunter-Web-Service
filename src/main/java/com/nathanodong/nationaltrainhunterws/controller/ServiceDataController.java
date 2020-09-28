@@ -3,6 +3,7 @@ package com.nathanodong.nationaltrainhunterws.controller;
 import com.nathanodong.nationaltrainhunterws.model.ServiceDeparture;
 import com.nathanodong.nationaltrainhunterws.model.ServiceInformation;
 import com.nathanodong.nationaltrainhunterws.service.ServiceDataService;
+import com.thalesgroup.rtti._2007_10_10.ldb.commontypes.FilterType;
 import com.thalesgroup.rtti._2017_10_01.ldbsv.GetBoardByCRSParams;
 import com.thalesgroup.rtti._2017_10_01.ldbsv.GetServiceDetailsByRIDParams;
 import com.thalesgroup.rtti._2017_10_01.ldbsv.ObjectFactory;
@@ -36,11 +37,13 @@ public class ServiceDataController {
                                                          @RequestParam String crs,
                                                          @RequestParam(required = false) String filterCrs,
                                                          @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime time,
-                                                         @RequestParam int timeWindow) throws DatatypeConfigurationException {
+                                                         @RequestParam int timeWindow,
+                                                         @RequestParam FilterType filterType) throws DatatypeConfigurationException {
         GetBoardByCRSParams boardByCRSParams = objectFactory.createGetBoardByCRSParams();
         boardByCRSParams.setNumRows(numRows);
         boardByCRSParams.setCrs(crs);
         boardByCRSParams.setFiltercrs(objectFactory.createGetBoardByCRSParamsFiltercrs(filterCrs));
+        boardByCRSParams.setFilterType(filterType);
 
         GregorianCalendar gcal = GregorianCalendar.from(time.atZone(ZoneId.systemDefault()));
         XMLGregorianCalendar xcal = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);

@@ -89,23 +89,26 @@ public class ServiceDataService {
         serviceInformation.setServiceType(serviceDetails.getServiceType());
 
         List<ServiceCallingPoint> callingPoints = new ArrayList<>();
-        serviceDetails.getLocations().getLocation().forEach(serviceLocation -> {
-            ServiceCallingPoint serviceCallingPoint = new ServiceCallingPoint();
+        serviceDetails.getLocations().getLocation()
+                .stream()
+                .filter(serviceLocation -> serviceLocation.isIsPass() == null)
+                .forEach(serviceLocation -> {
+                    ServiceCallingPoint serviceCallingPoint = new ServiceCallingPoint();
 
-            serviceCallingPoint.setCrs(serviceLocation.getCrs());
-            serviceCallingPoint.setStationName(serviceLocation.getLocationName());
-            serviceCallingPoint.setPlatform(serviceLocation.getPlatform());
+                    serviceCallingPoint.setCrs(serviceLocation.getCrs());
+                    serviceCallingPoint.setStationName(serviceLocation.getLocationName());
+                    serviceCallingPoint.setPlatform(serviceLocation.getPlatform());
 
-            serviceCallingPoint.setScheduledArrivalTime(convertToLocalDateTime(serviceLocation.getSta()));
-            serviceCallingPoint.setActualArrivalTime(convertToLocalDateTime(serviceLocation.getAta()));
-            serviceCallingPoint.setEstimatedArrivalTime(convertToLocalDateTime(serviceLocation.getEta()));
+                    serviceCallingPoint.setScheduledArrivalTime(convertToLocalDateTime(serviceLocation.getSta()));
+                    serviceCallingPoint.setActualArrivalTime(convertToLocalDateTime(serviceLocation.getAta()));
+                    serviceCallingPoint.setEstimatedArrivalTime(convertToLocalDateTime(serviceLocation.getEta()));
 
-            serviceCallingPoint.setScheduledDepartureTime(convertToLocalDateTime(serviceLocation.getStd()));
-            serviceCallingPoint.setActualDepartureTime(convertToLocalDateTime(serviceLocation.getAtd()));
-            serviceCallingPoint.setEstimatedDepartureTime(convertToLocalDateTime(serviceLocation.getEtd()));
+                    serviceCallingPoint.setScheduledDepartureTime(convertToLocalDateTime(serviceLocation.getStd()));
+                    serviceCallingPoint.setActualDepartureTime(convertToLocalDateTime(serviceLocation.getAtd()));
+                    serviceCallingPoint.setEstimatedDepartureTime(convertToLocalDateTime(serviceLocation.getEtd()));
 
-            callingPoints.add(serviceCallingPoint);
-        });
+                    callingPoints.add(serviceCallingPoint);
+                });
         serviceInformation.setCallingPoints(callingPoints);
 
         return serviceInformation;

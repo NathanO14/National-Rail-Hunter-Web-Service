@@ -109,6 +109,10 @@ public class ServiceDataService {
                     serviceCallingPoint.setEstimatedDepartureTime(convertToLocalDateTime(serviceLocation.getEtd()));
                     serviceCallingPoint.setDepartureType(serviceLocation.getDepartureType());
 
+                    serviceCallingPoint.setCancelled(serviceLocation.isIsCancelled() != null
+                            ? serviceLocation.isIsCancelled()
+                            : false);
+
                     callingPoints.add(serviceCallingPoint);
                 });
         serviceInformation.setCallingPoints(callingPoints);

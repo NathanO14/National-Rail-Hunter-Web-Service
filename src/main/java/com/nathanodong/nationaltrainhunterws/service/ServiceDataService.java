@@ -102,10 +102,12 @@ public class ServiceDataService {
                     serviceCallingPoint.setScheduledArrivalTime(convertToLocalDateTime(serviceLocation.getSta()));
                     serviceCallingPoint.setActualArrivalTime(convertToLocalDateTime(serviceLocation.getAta()));
                     serviceCallingPoint.setEstimatedArrivalTime(convertToLocalDateTime(serviceLocation.getEta()));
+                    serviceCallingPoint.setArrivalType(serviceLocation.getArrivalType());
 
                     serviceCallingPoint.setScheduledDepartureTime(convertToLocalDateTime(serviceLocation.getStd()));
                     serviceCallingPoint.setActualDepartureTime(convertToLocalDateTime(serviceLocation.getAtd()));
                     serviceCallingPoint.setEstimatedDepartureTime(convertToLocalDateTime(serviceLocation.getEtd()));
+                    serviceCallingPoint.setDepartureType(serviceLocation.getDepartureType());
 
                     callingPoints.add(serviceCallingPoint);
                 });

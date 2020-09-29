@@ -1,5 +1,7 @@
 package com.nathanodong.nationaltrainhunterws.model;
 
+import com.thalesgroup.rtti._2015_11_27.ldbsv.commontypes.ForecastType;
+
 import java.time.LocalDateTime;
 
 public class ServiceCallingPoint {
@@ -16,11 +18,15 @@ public class ServiceCallingPoint {
 
     private LocalDateTime estimatedArrivalTime;
 
+    private ForecastType arrivalType;
+
     private LocalDateTime scheduledDepartureTime;
 
     private LocalDateTime actualDepartureTime;
 
     private LocalDateTime estimatedDepartureTime;
+
+    private ForecastType departureType;
 
     private boolean cancelled;
 
@@ -74,6 +80,14 @@ public class ServiceCallingPoint {
         this.estimatedArrivalTime = estimatedArrivalTime;
     }
 
+    public ForecastType getArrivalType() {
+        return arrivalType;
+    }
+
+    public void setArrivalType(ForecastType arrivalType) {
+        this.arrivalType = arrivalType;
+    }
+
     public LocalDateTime getScheduledDepartureTime() {
         return scheduledDepartureTime;
     }
@@ -104,5 +118,13 @@ public class ServiceCallingPoint {
 
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
+    }
+
+    public ForecastType getDepartureType() {
+        return departureType;
+    }
+
+    public void setDepartureType(ForecastType departureType) {
+        this.departureType = departureType;
     }
 }

@@ -40,7 +40,9 @@ public class ServiceDataService {
     private List<ServiceMessage> getMessages(GetBoardResponseType departureBoard) {
         List<ServiceMessage> messages = new ArrayList<>();
 
-        List<NRCCMessage> nrccMessages = departureBoard.getGetBoardResult().getNrccMessages().getMessage();
+        List<NRCCMessage> nrccMessages = departureBoard.getGetBoardResult().getNrccMessages() != null
+                ? departureBoard.getGetBoardResult().getNrccMessages().getMessage()
+                : Collections.emptyList();
 
         nrccMessages.forEach(nrccMessage -> {
             ServiceMessage serviceMessage = new ServiceMessage();

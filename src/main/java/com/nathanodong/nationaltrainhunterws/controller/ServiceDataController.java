@@ -1,6 +1,6 @@
 package com.nathanodong.nationaltrainhunterws.controller;
 
-import com.nathanodong.nationaltrainhunterws.model.ServiceDeparture;
+import com.nathanodong.nationaltrainhunterws.model.ServiceDepartureResult;
 import com.nathanodong.nationaltrainhunterws.model.ServiceInformation;
 import com.nathanodong.nationaltrainhunterws.service.ServiceDataService;
 import com.thalesgroup.rtti._2007_10_10.ldb.commontypes.FilterType;
@@ -20,7 +20,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 @RestController
 @RequestMapping("v1")
@@ -33,7 +32,7 @@ public class ServiceDataController {
     private ObjectFactory objectFactory;
 
     @RequestMapping(value = "/service/departureBoard", method = RequestMethod.GET)
-    public List<ServiceDeparture> getDepartureBoardByCrs(@RequestParam int numRows,
+    public ServiceDepartureResult getDepartureBoardByCrs(@RequestParam int numRows,
                                                          @RequestParam String crs,
                                                          @RequestParam(required = false) String filterCrs,
                                                          @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime time,

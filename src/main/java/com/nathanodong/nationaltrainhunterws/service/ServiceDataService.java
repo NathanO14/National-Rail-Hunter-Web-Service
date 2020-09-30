@@ -1,8 +1,7 @@
 package com.nathanodong.nationaltrainhunterws.service;
 
-import com.nathanodong.nationaltrainhunterws.model.ServiceCallingPoint;
-import com.nathanodong.nationaltrainhunterws.model.ServiceDeparture;
-import com.nathanodong.nationaltrainhunterws.model.ServiceInformation;
+import com.nathanodong.nationaltrainhunterws.model.*;
+import com.thalesgroup.rtti._2012_01_13.ldbsv.types.NRCCMessage;
 import com.thalesgroup.rtti._2013_11_28.token.types.AccessToken;
 import com.thalesgroup.rtti._2017_10_01.ldbsv.*;
 import com.thalesgroup.rtti._2017_10_01.ldbsv.types.ServiceDetails;
@@ -29,10 +28,35 @@ public class ServiceDataService {
 
     private final Logger logger = LoggerFactory.getLogger(ServiceDataService.class);
 
-    public List<ServiceDeparture> getDepartureBoard(GetBoardByCRSParams getBoardRequestParams) {
-        List<ServiceDeparture> departures = new ArrayList<>();
-
+    public ServiceDepartureResult getDepartureBoard(GetBoardByCRSParams getBoardRequestParams) {
         GetBoardResponseType departureBoard = ldbsvServiceSoap.getDepartureBoardByCRS(getBoardRequestParams, accessToken);
+
+        List<ServiceDeparture> departures = getDepartures(departureBoard);
+        List<ServiceMessage> messages = getMessages(departureBoard);
+
+        return new ServiceDepartureResult(departures, messages);
+    }
+
+    private List<ServiceMessage> getMessages(GetBoardResponseType departureBoard) {
+        List<ServiceMessage> messages = new ArrayList<>();
+
+        List<NRCCMessage> nrccMessages = departureBoard.getGetBoardResult().getNrccMessages().getMessage();
+
+        nrccMessages.forEach(nrccMessage -> {
+            ServiceMessage serviceMessage = new ServiceMessage();
+
+            serviceMessage.setSeverity(nrccMessage.getSeverity());
+            serviceMessage.setCategory(nrccMessage.getCategory());
+            serviceMessage.setMessage(nrccMessage.getXhtmlMessage());
+
+            messages.add(serviceMessage);
+        });
+
+        return messages;
+    }
+
+    private List<ServiceDeparture> getDepartures(GetBoardResponseType departureBoard) {
+        List<ServiceDeparture> departures = new ArrayList<>();
 
         logger.debug("Trains at {}", departureBoard.getGetBoardResult().getLocationName());
         logger.debug("===============================================================================");

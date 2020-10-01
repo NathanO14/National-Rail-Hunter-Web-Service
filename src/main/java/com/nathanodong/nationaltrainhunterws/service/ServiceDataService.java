@@ -117,7 +117,7 @@ public class ServiceDataService {
         List<ServiceCallingPoint> callingPoints = new ArrayList<>();
         serviceDetails.getLocations().getLocation()
                 .stream()
-                .filter(serviceLocation -> serviceLocation.isIsPass() == null)
+                .filter(serviceLocation -> serviceLocation.isIsPass() == null && serviceLocation.getCrs() != null)
                 .forEach(serviceLocation -> {
                     ServiceCallingPoint serviceCallingPoint = new ServiceCallingPoint();
 

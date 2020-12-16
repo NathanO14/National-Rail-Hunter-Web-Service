@@ -42,7 +42,6 @@ public class AppConfiguration {
 
     @Bean
     public Ldbsv ldbsv() throws Exception {
-        Ldbsv ldbsv = new Ldbsv(nrUrl());
         return new Ldbsv();
     }
 

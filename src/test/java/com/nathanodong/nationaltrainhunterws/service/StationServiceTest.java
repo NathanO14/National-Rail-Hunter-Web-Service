@@ -38,6 +38,24 @@ public class StationServiceTest {
         });
     }
 
+    @Test
+    public void getStationsBySearchTermByCRS() throws Exception {
+        List<Station> stations = stationService.getStationsBySearchTerm("kng");
+        assertFalse(stations.isEmpty());
+
+        List<StationExpectation> expectations = Arrays.asList(
+                new StationExpectation("KNG", "Kingston")
+        );
+
+        expectations.forEach(stationExpectation -> {
+            Station expectedStation = stations.stream()
+                    .filter(station -> station.getStationCode().equals(stationExpectation.stationCode))
+                    .findFirst()
+                    .orElse(null);
+            stationExpectation.assertStation(expectedStation);
+        });
+    }
+
     private static class StationExpectation {
         private final String stationCode;
         private final String stationName;

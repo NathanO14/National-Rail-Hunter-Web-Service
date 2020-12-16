@@ -31,7 +31,8 @@ public class StationService {
         GetStationListResponseType response = ldbsvRefServiceSoap.getStationList(params, accessToken);
         return response.getGetStationListResult().getStationList().getStation()
                 .stream()
-                .filter(stationName -> stationName.getCrs().equals(searchTerm) || stationName.getValue().startsWith(searchTerm))
+                .filter(stationName -> stationName.getCrs().equals(searchTerm.toUpperCase()) ||
+                        stationName.getValue().toLowerCase().startsWith(searchTerm.toLowerCase()))
                 .map(stationName -> new Station(stationName.getCrs(), stationName.getValue()))
                 .collect(Collectors.toList());
     }

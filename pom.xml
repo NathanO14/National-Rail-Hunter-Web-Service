@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.nathanodong.nationaltrainhunterws</groupId>
     <artifactId>National-Train-Hunter-Web-Service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
     <name>National-Train-Hunter-Web-Service</name>
     <description>National Train Hunter Web Service</description>
 

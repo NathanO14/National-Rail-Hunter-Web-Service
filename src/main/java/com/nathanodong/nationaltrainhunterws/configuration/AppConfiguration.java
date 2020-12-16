@@ -1,9 +1,10 @@
-package com.nathanodong.nationaltrainhunterws;
+package com.nathanodong.nationaltrainhunterws.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.thalesgroup.rtti._2013_11_28.token.types.AccessToken;
+import com.thalesgroup.rtti._2015_05_14.ldbsv_ref.LDBSVRefServiceSoap;
 import com.thalesgroup.rtti._2017_10_01.ldbsv.LDBSVServiceSoap;
 import com.thalesgroup.rtti._2017_10_01.ldbsv.Ldbsv;
 import com.thalesgroup.rtti._2017_10_01.ldbsv.ObjectFactory;
@@ -48,6 +49,11 @@ public class AppConfiguration {
     @Bean
     public LDBSVServiceSoap ldbsvServiceSoap(Ldbsv ldbsv) {
         return ldbsv.getLDBSVServiceSoap12();
+    }
+
+    @Bean
+    public LDBSVRefServiceSoap ldbsvRefServiceSoap(Ldbsv ldbsv) {
+        return ldbsv.getLDBSVRefServiceSoap12();
     }
 
     @Bean

@@ -8,7 +8,6 @@ import com.thalesgroup.rtti._2017_10_01.ldbsv.types.ServiceDetails;
 import com.thalesgroup.rtti._2017_10_01.ldbsv.types.ServiceItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -20,13 +19,16 @@ import java.util.List;
 @Service
 public class ServiceDataService {
 
-    @Autowired
-    private AccessToken accessToken;
-
-    @Autowired
-    private LDBSVServiceSoap ldbsvServiceSoap;
-
     private final Logger logger = LoggerFactory.getLogger(ServiceDataService.class);
+
+    private final AccessToken accessToken;
+
+    private final LDBSVServiceSoap ldbsvServiceSoap;
+
+    public ServiceDataService(AccessToken accessToken, LDBSVServiceSoap ldbsvServiceSoap) {
+        this.accessToken = accessToken;
+        this.ldbsvServiceSoap = ldbsvServiceSoap;
+    }
 
     public ServiceDepartureResult getDepartureBoard(GetBoardByCRSParams getBoardRequestParams) {
         GetBoardResponseType departureBoard = ldbsvServiceSoap.getDepartureBoardByCRS(getBoardRequestParams, accessToken);

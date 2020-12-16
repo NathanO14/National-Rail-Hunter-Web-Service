@@ -1,6 +1,7 @@
 package com.nathanodong.nationaltrainhunterws;
 
 import com.thalesgroup.rtti._2013_11_28.token.types.AccessToken;
+import com.thalesgroup.rtti._2015_05_14.ldbsv_ref.LDBSVRefServiceSoap;
 import com.thalesgroup.rtti._2017_10_01.ldbsv.LDBSVServiceSoap;
 import com.thalesgroup.rtti._2017_10_01.ldbsv.Ldbsv;
 import org.apache.cxf.endpoint.Client;
@@ -17,6 +18,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 public abstract class AbstractNTHIntegrationTest {
     @MockBean
     protected LDBSVServiceSoap ldbsvServiceSoap;
+
+    @MockBean
+    protected LDBSVRefServiceSoap ldbsvRefServiceSoap;
 
     @MockBean
     private Ldbsv ldbsv;

@@ -25,11 +25,15 @@ import java.util.GregorianCalendar;
 @RequestMapping("v1")
 public class ServiceDataController {
 
-    @Autowired
-    private ServiceDataService serviceDataService;
+    private final ServiceDataService serviceDataService;
+
+    private final ObjectFactory objectFactory;
 
     @Autowired
-    private ObjectFactory objectFactory;
+    public ServiceDataController(ServiceDataService serviceDataService, ObjectFactory objectFactory) {
+        this.serviceDataService = serviceDataService;
+        this.objectFactory = objectFactory;
+    }
 
     @RequestMapping(value = "/service/departureBoard", method = RequestMethod.GET)
     public ServiceDepartureResult getDepartureBoardByCrs(@RequestParam int numRows,

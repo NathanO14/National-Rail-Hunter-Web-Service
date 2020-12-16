@@ -1,18 +1,9 @@
 package com.nathanodong.nationaltrainhunterws.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Entity(name = "Station")
-@Table(name = "Station")
 public class Station {
 
-    @Id
     private String stationCode;
 
-    @Column
     private String stationName;
 
     public Station() {
